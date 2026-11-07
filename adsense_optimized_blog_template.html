@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexInsights | Modern Tech & Finance Blog</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .ad-banner-slot {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 2px dashed #cbd5e1;
+        }
+        .dark .ad-banner-slot {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px dashed #334155;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-brand-600 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium shadow-sm">
+        <span>🚀 Explore our ultimate guide to high-paying AdSense niches for 2026. <a href="#" onclick="switchView('article', 1)" class="underline hover:text-brand-100 font-semibold ml-1">Read Article &rarr;</a></span>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('home')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent">ApexInsights</span>
+                    <span class="block text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500 font-semibold">Publisher Network</span>
+                </div>
+            </div>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600 dark:text-slate-300">
+                <button onclick="switchView('home')" class="hover:text-brand-600 dark:hover:text-brand-400 transition nav-link-home font-semibold text-brand-600 dark:text-brand-400">Home</button>
+                <button onclick="filterCategory('Technology')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Technology</button>
+                <button onclick="filterCategory('Finance')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Finance</button>
+                <button onclick="filterCategory('AI & Future')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">AI & Future</button>
+                <button onclick="filterCategory('Lifestyle')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Lifestyle</button>
+                <button onclick="openModal('aboutModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">About</button>
+                <button onclick="openModal('contactModal')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Contact</button>
+            </nav>
+
+            <!-- Actions (Search & Dark Mode Toggle) -->
+            <div class="flex items-center gap-3">
+                <div class="relative hidden sm:block">
+                    <input type="text" id="searchInput" placeholder="Search articles..." onkeyup="handleSearch(event)" class="bg-slate-100 dark:bg-slate-800 text-xs sm:text-sm rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500 w-44 lg:w-64 border border-slate-200 dark:border-slate-700">
+                    <i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                </div>
+                <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Toggle Theme">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden px-4 pt-2 pb-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-2">
+            <input type="text" id="mobileSearchInput" placeholder="Search articles..." onkeyup="handleSearch(event)" class="w-full bg-slate-100 dark:bg-slate-800 text-sm rounded-lg px-3 py-2 mb-2 focus:outline-none border border-slate-200 dark:border-slate-700">
+            <button onclick="switchView('home'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Home</button>
+            <button onclick="filterCategory('Technology'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Technology</button>
+            <button onclick="filterCategory('Finance'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Finance</button>
+            <button onclick="filterCategory('AI & Future'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">AI & Future</button>
+            <button onclick="filterCategory('Lifestyle'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Lifestyle</button>
+            <button onclick="openModal('aboutModal'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">About Us</button>
+            <button onclick="openModal('contactModal'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Contact Us</button>
+        </div>
+    </header>
+
+    <!-- Top Leaderboard Ad Banner (AdSense Optimized Slot) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6">
+        <div class="ad-banner-slot rounded-2xl p-4 text-center relative overflow-hidden shadow-sm">
+            <span class="absolute top-2 right-3 text-[10px] uppercase font-bold tracking-widest text-slate-400 bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded">AdSense Header Slot (728x90)</span>
+            <div class="py-3 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div class="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center text-brand-600 font-bold text-lg">
+                    <i class="fa-solid fa-rectangle-ad"></i>
+                </div>
+                <div class="text-left">
+                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">Sponsored Ad Space: Scale Your Brand with High-Intent Traffic</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Targeted ads optimized for maximum CPC and viewability performance.</p>
+                </div>
+                <button onclick="simulateAdClick()" class="ml-auto bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow">Learn More</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dynamic Content Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-16">
+        
+        <!-- VIEW 1: HOME VIEW -->
+        <div id="homeView" class="space-y-12">
+            
+            <!-- Hero Featured Post -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm">
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">Featured Story</span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500"><i class="fa-regular fa-clock mr-1"></i> 6 min read</span>
+                        <span class="text-xs text-slate-400 dark:text-slate-500"><i class="fa-regular fa-calendar mr-1"></i> Nov 7, 2026</span>
+                    </div>
+                    <h1 onclick="switchView('article', 1)" class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white cursor-pointer hover:text-brand-600 dark:hover:text-brand-400 transition">
+                        The Future of Monetization: Maximizing AdSense RPM in High-Value Niches
+                    </h1>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base line-clamp-3">
+                        Discover proven architectural and content strategies to elevate your programmatic ad revenue. Learn how semantic layout, Core Web Vitals optimization, and user intent alignment drive higher eCPM.
+                    </p>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <img src="https://placehold.co/40x40/4f46e5/ffffff?text=JD" alt="Author" class="w-10 h-10 rounded-full">
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-900 dark:text-white">Jonathan Davis</h4>
+                                <p class="text-xs text-slate-500">Lead AdTech Analyst</p>
+                            </div>
+                        </div>
+                        <button onclick="switchView('article', 1)" class="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 dark:text-brand-400 hover:translate-x-1 transition">
+                            Read Full Article <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden rounded-2xl aspect-video lg:aspect-square group cursor-pointer" onclick="switchView('article', 1)">
+                    <img src="https://placehold.co/600x600/4f46e5/ffffff?text=AdTech+2026" alt="Featured Article" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent flex items-end p-6">
+                        <span class="text-white text-xs font-medium bg-black/40 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10">Finance & Tech</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Layout with Sidebar -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Articles List Column -->
+                <div class="lg:col-span-2 space-y-8">
+                    
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+                        <h2 id="sectionTitle" class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-newspaper text-brand-600"></i> Latest Publications
+                        </h2>
+                        <div class="flex items-center gap-2 text-xs font-medium text-slate-500">
+                            <span>Sort by:</span>
+                            <select id="sortSelect" onchange="sortArticles()" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 focus:outline-none">
+                                <option value="latest">Latest</option>
+                                <option value="popular">Most Popular</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Articles Grid -->
+                    <div id="articlesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+
+                    <!-- In-Feed Ad Banner Slot (AdSense Optimized Slot) -->
+                    <div class="ad-banner-slot rounded-2xl p-6 text-center relative overflow-hidden my-8 shadow-sm">
+                        <span class="absolute top-2 right-3 text-[10px] uppercase font-bold tracking-widest text-slate-400 bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded">AdSense In-Feed Ad Slot</span>
+                        <div class="py-4 space-y-2">
+                            <i class="fa-solid fa-bullhorn text-brand-600 text-2xl"></i>
+                            <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">Recommended Tool: Enterprise Cloud Hosting</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">Boost your website loading speed by 300% with NVMe caching and global CDN integration. Perfect for high-traffic AdSense publishers.</p>
+                            <button onclick="simulateAdClick()" class="mt-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow">Claim Special Offer</button>
+                        </div>
+                    </div>
+
+                    <!-- Secondary Articles Grid -->
+                    <div id="secondaryArticlesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+
+                </div>
+
+                <!-- Sidebar Column -->
+                <aside class="space-y-8">
+                    
+                    <!-- Newsletter Box -->
+                    <div class="bg-gradient-to-br from-brand-600 to-indigo-700 text-white rounded-3xl p-6 shadow-lg relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                        <h3 class="text-lg font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Publisher Newsletter
+                        </h3>
+                        <p class="text-xs text-brand-100 mb-4 leading-relaxed">
+                            Get weekly insights on high-paying AdSense keywords, SEO algorithm updates, and web monetization tactics.
+                        </p>
+                        <form onsubmit="handleNewsletter(event)" class="space-y-3">
+                            <input type="email" id="newsletterEmail" placeholder="Enter your work email" required class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-sm text-white placeholder-brand-200 focus:outline-none focus:bg-white/20">
+                            <button type="submit" class="w-full bg-white text-brand-700 font-semibold text-sm py-2.5 rounded-xl hover:bg-brand-50 transition shadow">
+                                Subscribe Free
+                            </button>
+                        </form>
+                        <p class="text-[10px] text-brand-200 mt-2 text-center">No spam. Unsubscribe anytime.</p>
+                    </div>
+
+                    <!-- Sidebar Ad Banner Slot (AdSense Sidebar 300x250) -->
+                    <div class="ad-banner-slot rounded-2xl p-4 text-center relative overflow-hidden shadow-sm">
+                        <span class="absolute top-2 right-3 text-[10px] uppercase font-bold tracking-widest text-slate-400 bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded">AdSense Sidebar (300x250)</span>
+                        <div class="py-8 space-y-3">
+                            <div class="w-16 h-16 bg-brand-500/10 rounded-2xl mx-auto flex items-center justify-center text-brand-600 text-2xl">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">Secure Your Digital Assets</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Enterprise grade security & DDoS protection for high volume blogs.</p>
+                            <button onclick="simulateAdClick()" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition">Learn More</button>
+                        </div>
+                    </div>
+
+                    <!-- Categories Widget -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-folder-open text-brand-600"></i> Categories
+                        </h3>
+                        <div class="space-y-2">
+                            <button onclick="filterCategory('Technology')" class="w-full flex items-center justify-between text-sm py-2 px-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300">
+                                <span>Technology</span>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs px-2 py-0.5 rounded-full font-medium">4</span>
+                            </button>
+                            <button onclick="filterCategory('Finance')" class="w-full flex items-center justify-between text-sm py-2 px-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300">
+                                <span>Finance & Wealth</span>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs px-2 py-0.5 rounded-full font-medium">3</span>
+                            </button>
+                            <button onclick="filterCategory('AI & Future')" class="w-full flex items-center justify-between text-sm py-2 px-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300">
+                                <span>AI & Future</span>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs px-2 py-0.5 rounded-full font-medium">3</span>
+                            </button>
+                            <button onclick="filterCategory('Lifestyle')" class="w-full flex items-center justify-between text-sm py-2 px-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300">
+                                <span>Lifestyle</span>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs px-2 py-0.5 rounded-full font-medium">2</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent / Trending Posts Widget -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-fire text-amber-500"></i> Trending Now
+                        </h3>
+                        <div id="trendingList" class="space-y-4">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+        <!-- VIEW 2: ARTICLE READING VIEW (Hidden by default) -->
+        <div id="articleView" class="hidden max-w-4xl mx-auto space-y-8">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-xs text-slate-400">
+                <button onclick="switchView('home')" class="hover:text-brand-600 transition">Home</button>
+                <span>/</span>
+                <span id="articleBreadcrumbCat" class="text-brand-600 font-medium">Technology</span>
+                <span>/</span>
+                <span id="articleBreadcrumbTitle" class="truncate max-w-xs">Article Title</span>
+            </div>
+
+            <!-- Article Header -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span id="articleCategoryBadge" class="bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">Technology</span>
+                    <span id="articleDate" class="text-xs text-slate-400"><i class="fa-regular fa-calendar mr-1"></i> Nov 7, 2026</span>
+                    <span id="articleReadTime" class="text-xs text-slate-400"><i class="fa-regular fa-clock mr-1"></i> 5 min read</span>
+                </div>
+                <h1 id="articleTitle" class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+                    Article Title Goes Here
+                </h1>
+                
+                <!-- Author Box -->
+                <div class="flex items-center justify-between py-4 border-y border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <img id="articleAuthorImg" src="https://placehold.co/40x40" alt="Author" class="w-12 h-12 rounded-full">
+                        <div>
+                            <h4 id="articleAuthorName" class="text-sm font-semibold text-slate-900 dark:text-white">Author Name</h4>
+                            <p id="articleAuthorRole" class="text-xs text-slate-500">Senior Contributor</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="shareArticle()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-600 transition" title="Share">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </button>
+                        <button onclick="toggleBookmark()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-600 transition" title="Bookmark">
+                            <i class="fa-regular fa-bookmark"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Image -->
+            <div class="rounded-3xl overflow-hidden aspect-video shadow-md">
+                <img id="articleHeroImg" src="https://placehold.co/1200x630" alt="Article Image" class="w-full h-full object-cover">
+            </div>
+
+            <!-- AdSlot Inside Article (AdSense Mid-Article) -->
+            <div class="ad-banner-slot rounded-2xl p-4 text-center relative overflow-hidden my-6">
+                <span class="absolute top-2 right-3 text-[10px] uppercase font-bold tracking-widest text-slate-400 bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded">AdSense In-Article Slot</span>
+                <div class="py-3 flex items-center justify-center gap-4">
+                    <div class="text-left">
+                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">Sponsored: Accelerate Your Workflow with AI Tools</p>
+                        <p class="text-xs text-slate-500">Discover automated content and marketing assistants today.</p>
+                    </div>
+                    <button onclick="simulateAdClick()" class="bg-brand-600 text-white text-xs font-semibold px-4 py-2 rounded-lg">Try Free</button>
+                </div>
+            </div>
+
+            <!-- Article Body Content -->
+            <div id="articleBodyContent" class="prose dark:prose-invert max-w-none space-y-6 text-slate-700 dark:text-slate-300 leading-relaxed text-base sm:text-lg">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Article Footer Tags & Share -->
+            <div class="pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tags:</span>
+                    <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs px-3 py-1 rounded-full font-medium">AdSense</span>
+                    <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs px-3 py-1 rounded-full font-medium">Publishers</span>
+                    <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs px-3 py-1 rounded-full font-medium">SEO</span>
+                </div>
+                <button onclick="switchView('home')" class="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
+                    <i class="fa-solid fa-arrow-left"></i> Back to All Articles
+                </button>
+            </div>
+
+            <!-- Related Articles Section -->
+            <div class="space-y-6 pt-12">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Related Stories</h3>
+                <div id="relatedArticlesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pt-16 pb-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm shadow">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <span class="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">ApexInsights</span>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        A modern digital publication platform engineered for high-performance content creators and programmatic advertisers.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-4">Categories</h4>
+                    <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+                        <li><button onclick="filterCategory('Technology')" class="hover:text-brand-600 transition">Technology</button></li>
+                        <li><button onclick="filterCategory('Finance')" class="hover:text-brand-600 transition">Finance & Wealth</button></li>
+                        <li><button onclick="filterCategory('AI & Future')" class="hover:text-brand-600 transition">AI & Future</button></li>
+                        <li><button onclick="filterCategory('Lifestyle')" class="hover:text-brand-600 transition">Lifestyle</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-4">Legal & Compliance</h4>
+                    <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+                        <li><button onclick="openModal('privacyModal')" class="hover:text-brand-600 transition">Privacy Policy</button></li>
+                        <li><button onclick="openModal('termsModal')" class="hover:text-brand-600 transition">Terms of Service</button></li>
+                        <li><button onclick="openModal('aboutModal')" class="hover:text-brand-600 transition">AdSense Disclosure</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white mb-4">Connect</h4>
+                    <div class="flex items-center gap-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-brand-600 hover:text-white transition"><i class="fa-brands fa-x-twitter text-xs"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-brand-600 hover:text-white transition"><i class="fa-brands fa-linkedin-in text-xs"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-brand-600 hover:text-white transition"><i class="fa-brands fa-github text-xs"></i></a>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-4">© 2026 ApexInsights. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODALS (Privacy, Terms, About, Contact) -->
+    <div id="modalBackdrop" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        
+        <!-- About Modal -->
+        <div id="aboutModal" class="modal-content hidden bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative space-y-4">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold">
+                    <i class="fa-solid fa-info"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">About ApexInsights</h3>
+            </div>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                ApexInsights is an independent digital publishing platform providing high-value editorial content in technology, finance, artificial intelligence, and modern lifestyle. Our website displays third-party programmatic advertisements through Google AdSense to help support free, premium journalism.
+            </p>
+            <button onclick="closeModals()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm py-2.5 rounded-xl transition">Got it</button>
+        </div>
+
+        <!-- Privacy Policy Modal -->
+        <div id="privacyModal" class="modal-content hidden bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative space-y-4 max-h-[80vh] overflow-y-auto">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Privacy Policy</h3>
+            <p class="text-xs text-slate-500">Last updated: January 2026</p>
+            <div class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                <p>ApexInsights uses Google AdSense to serve ads when you visit our website. Google may use information (not including your name, address, email address, or telephone number) about your visits to this and other websites in order to provide advertisements about goods and services of interest to you.</p>
+                <p>Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to your website or other websites.</p>
+                <p>Google's use of advertising cookies enables it and its partners to serve ads to your users based on their visit to your sites and/or other sites on the Internet.</p>
+            </div>
+            <button onclick="closeModals()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm py-2.5 rounded-xl transition">Close</button>
+        </div>
+
+        <!-- Terms Modal -->
+        <div id="termsModal" class="modal-content hidden bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative space-y-4 max-h-[80vh] overflow-y-auto">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Terms of Service</h3>
+            <div class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                <p>By accessing ApexInsights, you agree to comply with these terms of service and all applicable laws and regulations.</p>
+                <p>All editorial content, graphics, and trademarks are the intellectual property of ApexInsights unless otherwise specified.</p>
+            </div>
+            <button onclick="closeModals()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm py-2.5 rounded-xl transition">Close</button>
+        </div>
+
+        <!-- Contact Modal -->
+        <div id="contactModal" class="modal-content hidden bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative space-y-4">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Contact Our Editors</h3>
+            <form onsubmit="handleContactSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Your Name</label>
+                    <input type="text" required class="w-full bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 text-sm border border-slate-200 dark:border-slate-700 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
+                    <input type="email" required class="w-full bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 text-sm border border-slate-200 dark:border-slate-700 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Message</label>
+                    <textarea rows="3" required class="w-full bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 text-sm border border-slate-200 dark:border-slate-700 focus:outline-none"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm py-2.5 rounded-xl transition">Send Message</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-sm font-medium">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastMessage">Action completed successfully!</span>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Database of Articles
+        const articles = [
+            {
+                id: 1,
+                title: "The Future of Monetization: Maximizing AdSense RPM in High-Value Niches",
+                category: "Finance",
+                date: "Nov 7, 2026",
+                readTime: "6 min read",
+                author: "Jonathan Davis",
+                authorRole: "Lead AdTech Analyst",
+                authorImg: "https://placehold.co/40x40/4f46e5/ffffff?text=JD",
+                heroImg: "https://placehold.co/1200x630/4f46e5/ffffff?text=AdTech+2026",
+                excerpt: "Discover proven architectural and content strategies to elevate your programmatic ad revenue. Learn how semantic layout, Core Web Vitals optimization, and user intent alignment drive higher eCPM.",
+                body: `
+                    <p>In the evolving landscape of digital publishing, securing high programmatic revenue requires more than just publishing regular content. Advertisers on Google AdSense bid significantly higher for traffic that demonstrates verified expertise, authority, and trustworthiness (E-E-A-T).</p>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-6">1. Optimizing Viewability and Ad Placement</h3>
+                    <p>Ad viewability is one of the most critical metrics monitored by modern ad servers. Placing ad banner slots "above the fold" or seamlessly integrated within the reading flow ensures higher click-through rates (CTR) without compromising user experience.</p>
+                    <blockquote class="border-l-4 border-brand-600 pl-4 italic text-slate-600 dark:text-slate-400 my-4">
+                        "Quality traffic combined with strategic ad placement can increase your monthly AdSense revenue by up to 140%."
+                    </blockquote>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-6">2. Focusing on High-CPC Niches</h3>
+                    <p>Not all page views are created equal. Financial services, software-as-a-service (SaaS), cloud infrastructure, and legal tech command significantly higher cost-per-click rates compared to general entertainment or hobby blogs. Aligning your keyword research with commercial intent is essential.</p>
+                `,
+                views: 1420
+            },
+            {
+                id: 2,
+                title: "Top 10 High-Paying AdSense Niches for 2026 Publishers",
+                category: "Finance",
+                date: "Nov 5, 2026",
+                readTime: "5 min read",
+                author: "Sarah Jenkins",
+                authorRole: "Financial Markets Editor",
+                authorImg: "https://placehold.co/40x40/0ea5e9/ffffff?text=SJ",
+                heroImg: "https://placehold.co/1200x630/0ea5e9/ffffff?text=High+Paying+Niches",
+                excerpt: "Explore the most lucrative verticals for blog monetization this year, including cloud computing, cybersecurity software, and personal wealth management.",
+                body: `
+                    <p>Choosing the right niche is the single most important decision for any aspiring AdSense publisher. While broader topics attract higher raw visitor counts, specialized financial and enterprise software niches offer exceptional RPMs.</p>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-6">Enterprise Software & Cloud Security</h3>
+                    <p>With businesses migrating rapidly to cloud-native architectures, software solutions targeting enterprise cybersecurity and DevOps command top-tier advertiser bids.</p>
+                `,
+                views: 980
+            },
+            {
+                id: 3,
+                title: "Next-Gen Web Development: Building Lightning-Fast Content Sites",
+                category: "Technology",
+                date: "Nov 3, 2026",
+                readTime: "4 min read",
+                author: "Alex Rivera",
+                authorRole: "Principal Architect",
+                authorImg: "https://placehold.co/40x40/10b981/ffffff?text=AR",
+                heroImg: "https://placehold.co/1200x630/10b981/ffffff?text=Web+Performance",
+                excerpt: "How lightning-fast page load times and lightweight CSS frameworks improve Google Core Web Vitals and boost AdSense ad delivery speed.",
+                body: `
+                    <p>Page speed directly impacts bounce rates and ad viewability. Minimizing render-blocking scripts and leveraging utility-first CSS frameworks like Tailwind ensures your pages score 95+ on Google PageSpeed Insights.</p>
+                `,
+                views: 870
+            },
+            {
+                id: 4,
+                title: "The Rise of Autonomous AI Agents in Enterprise Workflows",
+                category: "AI & Future",
+                date: "Nov 1, 2026",
+                readTime: "7 min read",
+                author: "Dr. Elena Vance",
+                authorRole: "AI Research Fellow",
+                authorImg: "https://placehold.co/40x40/8b5cf6/ffffff?text=EV",
+                heroImg: "https://placehold.co/1200x630/8b5cf6/ffffff?text=Autonomous+AI",
+                excerpt: "Examining how multi-agent AI systems are transforming operational efficiency across Fortune 500 corporations.",
+                body: `
+                    <p>Autonomous artificial intelligence agents are transitioning from experimental research labs into enterprise production environments, handling complex multi-step workflows with unprecedented autonomy.</p>
+                `,
+                views: 1650
+            },
+            {
+                id: 5,
+                title: "Minimalist Productivity Systems for Remote Engineering Teams",
+                category: "Lifestyle",
+                date: "Oct 28, 2026",
+                readTime: "5 min read",
+                author: "Marcus Chen",
+                authorRole: "Productivity Coach",
+                authorImg: "https://placehold.co/40x40/f59e0b/ffffff?text=MC",
+                heroImg: "https://placehold.co/1200x630/f59e0b/ffffff?text=Remote+Work",
+                excerpt: "Streamlining daily communications and asynchronous workflows for high-performing distributed engineering teams.",
+                body: `
+                    <p>Remote work success relies heavily on asynchronous communication protocols and distraction-free time blocks. Discover how leading engineering teams maintain deep focus.</p>
+                `,
+                views: 640
+            },
+            {
+                id: 6,
+                title: "Cybersecurity Best Practices for Cloud-Native SaaS Applications",
+                category: "Technology",
+                date: "Oct 25, 2026",
+                readTime: "6 min read",
+                author: "Alex Rivera",
+                authorRole: "Principal Architect",
+                authorImg: "https://placehold.co/40x40/10b981/ffffff?text=AR",
+                heroImg: "https://placehold.co/1200x630/10b981/ffffff?text=Cloud+Security",
+                excerpt: "A comprehensive blueprint for securing microservices, managing IAM permissions, and defending against zero-day vulnerabilities.",
+                body: `
+                    <p>As cyber threats grow increasingly sophisticated, securing cloud-native applications requires zero-trust architecture principles and continuous automated auditing.</p>
+                `,
+                views: 790
+            }
+        ];
+
+        let currentCategory = 'All';
+        let searchQuery = '';
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            renderArticles();
+            renderTrending();
+        };
+
+        // Render Articles Grid
+        function renderArticles() {
+            let filtered = articles;
+            if (currentCategory !== 'All') {
+                filtered = filtered.filter(a => a.category === currentCategory);
+            }
+            if (searchQuery.trim() !== '') {
+                const q = searchQuery.toLowerCase();
+                filtered = filtered.filter(a => a.title.toLowerCase().includes(q) || a.excerpt.toLowerCase().includes(q) || a.category.toLowerCase().includes(q));
+            }
+
+            const grid1 = document.getElementById('articlesGrid');
+            const grid2 = document.getElementById('secondaryArticlesGrid');
+            
+            if (filtered.length === 0) {
+                grid1.innerHTML = `<div class="col-span-2 text-center py-12 text-slate-400">No articles found matching your criteria.</div>`;
+                grid2.innerHTML = '';
+                return;
+            }
+
+            // Split articles into two grids for in-feed ad placement insertion
+            const midpoint = Math.ceil(filtered.length / 2);
+            const firstBatch = filtered.slice(0, midpoint);
+            const secondBatch = filtered.slice(midpoint);
+
+            grid1.innerHTML = firstBatch.map(article => `
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col group cursor-pointer" onclick="switchView('article', ${article.id})">
+                    <div class="aspect-video overflow-hidden relative">
+                        <img src="${article.heroImg}" alt="${article.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-brand-600 dark:text-brand-400 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg">${article.category}</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow space-y-3">
+                        <div class="flex items-center gap-3 text-xs text-slate-400">
+                            <span><i class="fa-regular fa-calendar mr-1"></i> ${article.date}</span>
+                            <span>•</span>
+                            <span><i class="fa-regular fa-clock mr-1"></i> ${article.readTime}</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition leading-snug">
+                            ${article.title}
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 line-clamp-2">
+                            ${article.excerpt}
+                        </p>
+                        <div class="pt-4 mt-auto border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">${article.author}</span>
+                            <span class="text-xs font-semibold text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition">Read &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            grid2.innerHTML = secondBatch.map(article => `
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col group cursor-pointer" onclick="switchView('article', ${article.id})">
+                    <div class="aspect-video overflow-hidden relative">
+                        <img src="${article.heroImg}" alt="${article.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-brand-600 dark:text-brand-400 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg">${article.category}</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow space-y-3">
+                        <div class="flex items-center gap-3 text-xs text-slate-400">
+                            <span><i class="fa-regular fa-calendar mr-1"></i> ${article.date}</span>
+                            <span>•</span>
+                            <span><i class="fa-regular fa-clock mr-1"></i> ${article.readTime}</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition leading-snug">
+                            ${article.title}
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 line-clamp-2">
+                            ${article.excerpt}
+                        </p>
+                        <div class="pt-4 mt-auto border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">${article.author}</span>
+                            <span class="text-xs font-semibold text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition">Read &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Trending Sidebar Widget
+        function renderTrending() {
+            const sorted = [...articles].sort((a,b) => b.views - a.views).slice(0, 4);
+            const container = document.getElementById('trendingList');
+            container.innerHTML = sorted.map((art, idx) => `
+                <div onclick="switchView('article', ${art.id})" class="flex items-start gap-3 cursor-pointer group">
+                    <span class="text-lg font-extrabold text-slate-300 dark:text-slate-700 group-hover:text-brand-600 transition">0${idx+1}</span>
+                    <div>
+                        <h4 class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition line-clamp-2">${art.title}</h4>
+                        <span class="text-[10px] text-slate-400"><i class="fa-regular fa-eye mr-1"></i> ${art.views} reads</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Switch Views (Home vs Article View)
+        function switchView(viewName, articleId = null) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const homeView = document.getElementById('homeView');
+            const articleView = document.getElementById('articleView');
+
+            if (viewName === 'home') {
+                homeView.classList.remove('hidden');
+                articleView.classList.add('hidden');
+            } else if (viewName === 'article' && articleId) {
+                homeView.classList.add('hidden');
+                articleView.classList.remove('hidden');
+                loadArticleData(articleId);
+            }
+        }
+
+        // Load Article Data into Reading View
+        function loadArticleData(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+
+            document.getElementById('articleBreadcrumbCat').innerText = article.category;
+            document.getElementById('articleBreadcrumbTitle').innerText = article.title;
+            document.getElementById('articleCategoryBadge').innerText = article.category;
+            document.getElementById('articleDate').innerHTML = `<i class="fa-regular fa-calendar mr-1"></i> ${article.date}`;
+            document.getElementById('articleReadTime').innerHTML = `<i class="fa-regular fa-clock mr-1"></i> ${article.readTime}`;
+            document.getElementById('articleTitle').innerText = article.title;
+            document.getElementById('articleAuthorImg').src = article.authorImg;
+            document.getElementById('articleAuthorName').innerText = article.author;
+            document.getElementById('articleAuthorRole').innerText = article.authorRole;
+            document.getElementById('articleHeroImg').src = article.heroImg;
+            document.getElementById('articleBodyContent').innerHTML = article.body;
+
+            // Load Related Articles
+            const related = articles.filter(a => a.id !== id && a.category === article.category).slice(0, 2);
+            const relatedContainer = document.getElementById('relatedArticlesGrid');
+            relatedContainer.innerHTML = related.map(art => `
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 shadow-sm cursor-pointer group" onclick="switchView('article', ${art.id})">
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition mb-2">${art.title}</h4>
+                    <p class="text-xs text-slate-500 line-clamp-2">${art.excerpt}</p>
+                </div>
+            `).join('');
+        }
+
+        // Filter Category
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.getElementById('sectionTitle').innerHTML = `<i class="fa-solid fa-folder text-brand-600"></i> ${cat} Articles`;
+            switchView('home');
+            renderArticles();
+        }
+
+        // Search Handler
+        function handleSearch(e) {
+            searchQuery = e.target.value;
+            switchView('home');
+            renderArticles();
+        }
+
+        // Sort Articles
+        function sortArticles() {
+            const val = document.getElementById('sortSelect').value;
+            if (val === 'popular') {
+                articles.sort((a,b) => b.views - a.views);
+            } else {
+                articles.sort((a,b) => b.id - a.id);
+            }
+            renderArticles();
+        }
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                icon.className = "fa-solid fa-sun";
+            } else {
+                icon.className = "fa-solid fa-moon";
+            }
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Modal Controls
+        function openModal(modalId) {
+            const backdrop = document.getElementById('modalBackdrop');
+            backdrop.classList.remove('hidden');
+            document.querySelectorAll('.modal-content').forEach(m => m.classList.add('hidden'));
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModals() {
+            document.getElementById('modalBackdrop').classList.add('hidden');
+        }
+
+        // Newsletter & Contact Form Handlers
+        function handleNewsletter(e) {
+            e.preventDefault();
+            const email = document.getElementById('newsletterEmail').value;
+            if (email) {
+                showToast("Subscribed successfully! Welcome aboard.");
+                e.target.reset();
+            }
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            closeModals();
+            showToast("Message sent successfully! We will get back to you shortly.");
+            e.target.reset();
+        }
+
+        function simulateAdClick() {
+            showToast("Ad clicked! In production, this directs users to the sponsor landing page.");
+        }
+
+        function shareArticle() {
+            showToast("Article link copied to clipboard!");
+        }
+
+        function toggleBookmark() {
+            showToast("Article saved to your bookmarks!");
+        }
+
+        // Toast Notification Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
